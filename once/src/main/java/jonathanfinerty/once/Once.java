@@ -18,6 +18,10 @@ public class Once {
     public static final int THIS_APP_INSTALL = 0;
     public static final int THIS_APP_VERSION = 1;
 
+    public interface Listener {
+        void onInitialised();
+    }
+
     private static long lastAppUpdatedTime = -1;
 
     private static PersistedMap tagLastSeenMap;
@@ -30,16 +34,27 @@ public class Once {
      * This method needs to be called before Once can be used.
      * Typically it will be called from your Application class's onCreate method.
      *
-     * @param context Application context
+     * @param context  Application context
+     * @param listener callback for completion
      */
-    public static void initialise(Context context) {
-        if (tagLastSeenMap == null) {
-            tagLastSeenMap = new PersistedMap(context, "TagLastSeenMap");
-        }
+    public static void initialise(Context context, final Listener listener) {
 
-        if (toDoSet == null) {
-            toDoSet = new PersistedSet(context, "ToDoSet");
-        }
+        AsyncSharedPreferenceLoader.Listener preferencesLoadingListener = new AsyncSharedPreferenceLoader.Listener() {
+
+            private int callCount = 0;
+
+            @Override
+            public synchronized void onLoaded() {
+                callCount++;
+                if (callCount == 2 && listener != null) {
+                    listener.onInitialised();
+                }
+            }
+        };
+
+        tagLastSeenMap = new PersistedMap(context, "TagLastSeenMap", preferencesLoadingListener);
+
+        toDoSet = new PersistedSet(context, "ToDoSet", preferencesLoadingListener);
 
         PackageManager packageManager = context.getPackageManager();
         try {
@@ -48,6 +63,16 @@ public class Once {
         } catch (PackageManager.NameNotFoundException ignored) {
 
         }
+    }
+
+    /**
+     * This method needs to be called before Once can be used.
+     * Typically it will be called from your Application class's onCreate method.
+     *
+     * @param context Application context
+     */
+    public static void initialise(Context context) {
+        initialise(context, null);
     }
 
     /**

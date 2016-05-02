@@ -20,9 +20,9 @@ class PersistedSet {
 
     private final AsyncSharedPreferenceLoader preferenceLoader;
 
-    public PersistedSet(Context context, String setName) {
+    public PersistedSet(Context context, String setName, AsyncSharedPreferenceLoader.Listener listener) {
         String preferencesName = PersistedSet.class.getSimpleName() + setName;
-        preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
+        preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName, listener);
     }
 
     private void waitForLoad() {

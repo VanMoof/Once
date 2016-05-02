@@ -18,9 +18,9 @@ class PersistedMap {
     private final Map<String, List<Long>> map = new ConcurrentHashMap<>();
     private final AsyncSharedPreferenceLoader preferenceLoader;
 
-    public PersistedMap(Context context, String mapName) {
+    public PersistedMap(Context context, String mapName, AsyncSharedPreferenceLoader.Listener listener) {
         String preferencesName = PersistedMap.class.getSimpleName() + mapName;
-        preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
+        preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName, listener);
     }
 
     private void waitForLoad() {
