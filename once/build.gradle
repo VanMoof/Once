@@ -51,7 +51,7 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                groupId = 'com.vanmoof'
+                groupId = 'com.vanmoof.once'
                 artifactId = 'once'
                 version = '1.0.0'
                 artifact(bundleReleaseAar)
