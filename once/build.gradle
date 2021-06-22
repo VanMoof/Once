@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: "com.jfrog.bintray"
+apply plugin: 'maven-publish'
 
 version = "1.3.0"
 
@@ -47,9 +47,9 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
-def siteUrl = 'https://github.com/jonfinerty/Once'
-def gitUrl = 'https://github.com/jonfinerty/Once.git'
-group = "com.jonathanfinerty.once"
+def siteUrl = 'https://github.com/VanMoof/Once'
+def gitUrl = 'https://github.com/VanMoof/Once.git'
+group = "com.vanmoof.once"
 
 install {
     repositories.mavenInstaller {
@@ -107,24 +107,24 @@ artifacts {
     archives sourcesJar
 }
 
-bintray {
-    Properties properties = new Properties()
-    def bintrayProperties = project.rootProject.file('bintray.properties')
-
-    if (bintrayProperties.exists()) {
-        properties.load(bintrayProperties.newDataInputStream())
-
-        user = properties.getProperty("bintray.user")
-        key = properties.getProperty("bintray.apikey")
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId = 'com.vanmoof.once'
+                artifactId = 'common'
+                version = '1.0.0'
+                artifact(bundleReleaseAar)
+            }
+        }
     }
-
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = "once"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
+    repositories {
+        maven {
+            url = uri("https://maven.pkg.github.com/VanMoof/Once")
+            credentials {
+                username = "marcocaloiaro1994"
+                password = "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"
+            }
+        }
     }
 }
