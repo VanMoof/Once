@@ -47,83 +47,23 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
-def siteUrl = 'https://github.com/VanMoof/Once'
-def gitUrl = 'https://github.com/VanMoof/Once.git'
-group = "com.vanmoof.once"
-
-install {
-    repositories.mavenInstaller {
-
-        pom {
-            project {
-                packaging 'aar'
-
-                name 'A small Android library to manage one-off operations for API 14 and higher.'
-                url siteUrl
-
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'jonathanfinerty'
-                        name 'Jonathan Finerty'
-                        email 'jonathanfinerty@gmail.com'
-                    }
-                }
-
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                groupId = 'com.vanmoof.once'
-                artifactId = 'common'
+                groupId = 'com.vanmoof'
+                artifactId = 'once'
                 version = '1.0.0'
                 artifact(bundleReleaseAar)
             }
         }
-    }
-    repositories {
-        maven {
-            url = uri("https://maven.pkg.github.com/VanMoof/Once")
-            credentials {
-                username = "marcocaloiaro1994"
-                password = "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"
+        repositories {
+            maven {
+                url = uri("https://maven.pkg.github.com/VanMoof/Once")
+                credentials {
+                    username = "xxx"
+                    password = "xxx"
+                }
             }
         }
     }
